@@ -1,4 +1,5 @@
 # shellcheck shell=bash
+# shellcheck disable=SC2034
 # Hàm dùng chung cho claude-minion.
 
 MINION_VERSION="0.2.0"
