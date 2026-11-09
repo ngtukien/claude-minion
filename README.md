@@ -74,10 +74,16 @@ Lệnh này sẽ:
 
 ### Cách 2: Cài đặt dạng Claude Code Plugin
 
-Trong terminal của Claude Code:
+Trong terminal của Claude Code (lệnh 1 bước trên Claude Code 2.1.275+):
+```
+/plugin install minion --marketplace ngtukien/claude-minion
+/minion-setup
+```
+
+Hoặc 2 bước truyền thống:
 ```
 /plugin marketplace add ngtukien/claude-minion
-/plugin install claude-minion@ngtukien
+/plugin install minion@ngtukien
 /minion-setup
 ```
 

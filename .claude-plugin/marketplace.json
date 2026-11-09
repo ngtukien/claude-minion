@@ -1,12 +1,14 @@
 {
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "ngtukien",
+  "description": "Orchestrator and parallel AI CLI minions for Claude Code",
   "owner": {
     "name": "Nguyễn Tự Kiên",
     "url": "https://github.com/ngtukien"
   },
   "plugins": [
     {
-      "name": "claude-minion",
+      "name": "minion",
       "source": "./",
       "description": "Claude orchestrator + parallel AI CLI minions (Antigravity CLI, ...)"
     }
