@@ -1,0 +1,14 @@
+{
+  "name": "ngtukien",
+  "owner": {
+    "name": "Nguyễn Tự Kiên",
+    "url": "https://github.com/ngtukien"
+  },
+  "plugins": [
+    {
+      "name": "claude-minion",
+      "source": "./",
+      "description": "Claude orchestrator + parallel AI CLI minions (Antigravity CLI, ...)"
+    }
+  ]
+}

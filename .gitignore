@@ -1,0 +1,4 @@
+.minion/
+.fleet/
+*.swp
+.DS_Store

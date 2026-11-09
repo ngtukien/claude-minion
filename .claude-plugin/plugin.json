@@ -1,0 +1,13 @@
+{
+  "name": "claude-minion",
+  "version": "0.2.0",
+  "description": "Claude làm Gru orchestrator: lập plan, điều phối đàn AI CLI minion (Antigravity CLI, ...) chạy song song, thẩm định và merge kết quả.",
+  "author": {
+    "name": "Nguyễn Tự Kiên",
+    "url": "https://github.com/ngtukien"
+  },
+  "homepage": "https://github.com/ngtukien/claude-minion",
+  "repository": "https://github.com/ngtukien/claude-minion",
+  "license": "MIT",
+  "keywords": ["orchestration", "multi-agent", "minion", "antigravity", "gemini", "workers", "parallel", "claude-code"]
+}

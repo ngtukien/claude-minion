@@ -1,0 +1,48 @@
+# claude-minion config — file bash, được 'source' khi chạy.
+# Vị trí: ~/.config/claude-minion/config  (đổi bằng biến môi trường MINION_CONFIG)
+
+# ─── Mặc định cho mọi worker ────────────────────────────────────────────
+DEFAULT_BACKEND=antigravity     # tên file trong backends/ (antigravity, gemini, mock, ...)
+DEFAULT_MODEL=""                # rỗng = để CLI tự chọn model mặc định
+                                # vd: "Gemini 3.5 Flash" — xem tên đúng bằng: agy models
+
+# ─── Danh sách worker ──────────────────────────────────────────────────
+# Mỗi dòng 1 worker:  "backend|model|account_home"
+#   - để trống cột nào thì dùng mặc định ở trên
+#   - account_home: thư mục HOME riêng chứa đăng nhập của worker; trống = $HOME
+#     (nhiều worker dùng chung 1 tài khoản thì để trống hoặc trỏ cùng 1 thư mục)
+# Thêm/bớt worker = thêm/xoá dòng. Đổi model = sửa cột 2.
+WORKERS=(
+  "antigravity||"
+  "antigravity||"
+  "antigravity||"
+  "antigravity||"
+)
+
+# Ví dụ nhiều tài khoản / nhiều model:
+# WORKERS=(
+#   "antigravity|Gemini 3.5 Flash|"
+#   "antigravity|Gemini 3.5 Flash|"
+#   "antigravity|Gemini 3.5 Pro|"        # 1 worker model mạnh hơn cho task khó
+#   "mock||"                             # worker giả để thử
+# )
+# Tách tài khoản bằng account_home (cột 3) KHÔNG chắc chắn hiệu quả với agy,
+# vì agy có thể lưu đăng nhập trong keyring hệ thống (dùng chung cho cả user).
+# Lưu ý: lập nhiều tài khoản chỉ để nhân quota có thể vi phạm điều khoản
+# của nhà cung cấp. Khuyến nghị dùng 1 tài khoản hoặc API key.
+
+# ─── Chạy ──────────────────────────────────────────────────────────────
+MAX_PARALLEL=""                 # rỗng = bằng số worker
+MAX_RETRY=3                     # số lần thử mỗi task khi lỗi
+RETRY_BACKOFF=20                # giây; chờ BACKOFF*lần (x3 nếu bị rate-limit)
+TASK_TIMEOUT=1800               # giây tối đa cho 1 lần chạy task
+
+# Prompt mở đầu gửi cho worker (rỗng = dùng mặc định trong lib/run.sh)
+WORKER_PREAMBLE_FILE=""
+
+# Tuỳ chọn riêng cho backend
+# AGY_BIN=agy
+# AGY_PERMISSION="--dangerously-skip-permissions"   # hoặc "--mode=accept-edits"
+# AGY_EXTRA_ARGS=""
+# GEMINI_BIN=gemini
+# GEMINI_EXTRA_ARGS=""

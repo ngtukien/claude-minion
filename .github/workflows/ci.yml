@@ -1,0 +1,13 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          shellcheck -x -S warning bin/minion lib/*.sh backends/*.sh install.sh tests/*.sh
+      - name: smoke test (mock backend)
+        run: bash tests/smoke.sh

@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# claude-minion — Claude làm Gru, nhiều AI CLI minion chạy song song.
+# https://github.com/ngtukien/claude-minion
+set -euo pipefail
+
+_self="${BASH_SOURCE[0]}"
+while [[ -L $_self ]]; do
+  _dir="$(cd -P "$(dirname "$_self")" && pwd)"
+  _self="$(readlink "$_self")"
+  [[ $_self != /* ]] && _self="$_dir/$_self"
+done
+MINION_HOME="$(cd -P "$(dirname "$_self")/.." && pwd)"
+MINION_BIN="$MINION_HOME/bin/minion"
+export MINION_HOME MINION_BIN
+
+# shellcheck source=../lib/common.sh
+source "$MINION_HOME/lib/common.sh"
+# shellcheck source=../lib/run.sh
+source "$MINION_HOME/lib/run.sh"
+# shellcheck source=../lib/manage.sh
+source "$MINION_HOME/lib/manage.sh"
+# shellcheck source=../lib/setup.sh
+source "$MINION_HOME/lib/setup.sh"
+
+usage() {
+  cat <<EOF
+claude-minion $MINION_VERSION
+
+Cách dùng: minion <lệnh> [tham số]
+
+Thiết lập:
+  init                 Tạo file config (~/.config/claude-minion/config)
+  login <số_worker>    Đăng nhập tài khoản cho worker đó (mở CLI tương tác)
+  doctor               Kiểm tra môi trường, backend, tài khoản
+  workers              Liệt kê worker: backend, model, tài khoản
+
+Chạy việc (trong một git repo):
+  run [task-id ...]    Chạy các task trong .minion/tasks/ song song (--todo: chỉ task chưa ok)
+  status               Bảng trạng thái các task
+  diff <task-id>       Xem thay đổi của task so với lúc bắt đầu
+  merge <task-id ...>  Merge nhánh của task vào nhánh hiện tại (--ok: mọi task đạt)
+  clean [--all]        Gỡ worktree + nhánh, lưu task/output vào .minion/archive
+
+Khác:
+  version              In phiên bản
+  help                 Hiển thị hướng dẫn này
+
+Config: \$MINION_CONFIG (mặc định $MINION_CONFIG)
+EOF
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  init)     cmd_init "$@" ;;
+  login)    cmd_login "$@" ;;
+  doctor)   cmd_doctor "$@" ;;
+  workers)  cmd_workers "$@" ;;
+  run)      cmd_run "$@" ;;
+  worker)   cmd_worker "$@" ;;        # nội bộ: minion run gọi
+  status)   cmd_status "$@" ;;
+  diff)     cmd_diff "$@" ;;
+  merge)    cmd_merge "$@" ;;
+  clean)    cmd_clean "$@" ;;
+  version|-v|--version) echo "claude-minion $MINION_VERSION" ;;
+  help|-h|--help) usage ;;
+  *) echo "minion: không có lệnh '$cmd'" >&2; usage >&2; exit 2 ;;
+esac
