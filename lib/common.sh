@@ -2,7 +2,7 @@
 # shellcheck disable=SC2034
 # Hàm dùng chung cho claude-minion.
 
-MINION_VERSION="0.2.0"
+MINION_VERSION="0.2.1"
 MINION_CONFIG="${MINION_CONFIG:-${FLEET_CONFIG:-${XDG_CONFIG_HOME:-$HOME/.config}/claude-minion/config}}"
 MINION_BACKENDS_DIR="$MINION_HOME/backends"
 

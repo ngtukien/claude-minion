@@ -1,6 +1,6 @@
 {
   "name": "minion",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Claude làm Gru orchestrator: lập plan, điều phối đàn AI CLI minion (Antigravity CLI, ...) chạy song song, thẩm định và merge kết quả.",
   "author": {
     "name": "Nguyễn Tự Kiên",

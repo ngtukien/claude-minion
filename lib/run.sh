@@ -170,7 +170,12 @@ cmd_worker() {
   # Commit thay đổi của worker vào nhánh minion/<id> để orchestrator diff/merge.
   git -C "$wt" add -A
   if ! git -C "$wt" diff --cached --quiet; then
-    git -C "$wt" -c user.name="claude-minion" -c user.email="claude-minion@localhost" \
+    local git_user git_email
+    git_user="$(git -C "$ROOT" config user.name 2>/dev/null || true)"
+    git_email="$(git -C "$ROOT" config user.email 2>/dev/null || true)"
+    git_user="${git_user:-ngtukien}"
+    git_email="${git_email:-144638414+ngtukien@users.noreply.github.com}"
+    git -C "$wt" -c user.name="$git_user" -c user.email="$git_email" \
       commit -q --no-verify -m "minion($id): $backend/${model:-default} attempt $attempt"
   fi
 

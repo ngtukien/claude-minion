@@ -3,7 +3,7 @@
 **Claude làm Gru (Orchestrator), dàn AI CLI làm Minions cày việc song song.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Release](https://img.shields.io/badge/release-v0.2.0-blue.svg)](https://github.com/ngtukien/claude-minion/releases/tag/v0.2.0)
+[![Release](https://img.shields.io/badge/release-v0.2.1-blue.svg)](https://github.com/ngtukien/claude-minion/releases/tag/v0.2.1)
 
 > **Ý tưởng cốt lõi**: Claude Code là bộ não kiến trúc sư (Gru) nhận yêu cầu lớn → phân rã thành các task độc lập. Các AI CLI nhỏ gọn, tốc độ cao (Minions — mặc định là Antigravity CLI `agy` chạy Gemini Flash/Pro) được thả vào từng **git worktree** riêng biệt để làm việc song song. Gru kiểm tra nghiệm thu từng dòng code, chạy test, yêu cầu sửa nếu chưa đạt, rồi tự tay merge code sạch vào nhánh chính.
 

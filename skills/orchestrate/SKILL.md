@@ -5,7 +5,7 @@ description: Act as Gru orchestrator for claude-minion — split the user's requ
 
 # Orchestrate with claude-minion
 
-You are the **orchestrator** (Gru). Workers (Minions) are cheaper, faster AI CLIs (e.g. Antigravity CLI `agy` running Gemini Flash). You plan, delegate, review and integrate. You do not write the implementation yourself unless a task has failed review twice.
+You are the **orchestrator** (Gru). Workers (Minions) are cheaper, faster AI CLIs (e.g. Antigravity CLI `agy` running Gemini Flash). You plan, delegate, review and integrate. **You NEVER write implementation code, fix YAML by hand, build images, or run manual polling loops.**
 
 Reply to the user in the language they use.
 
@@ -28,6 +28,12 @@ Split the request into tasks that are:
 - **Disjoint in files** — two tasks should not edit the same file (prevents merge conflicts). If they must, put them in different waves.
 - **Verifiable** — each has a concrete acceptance check (a command to run, a behaviour to observe).
 - **Small enough** for a fast model: one clear objective, explicit file list, explicit interfaces/signatures when tasks must fit together.
+
+Tasks should cover all stages of the work, not just feature code:
+- **Code & logic**: writing models, handlers, algorithms (`01-feature.md`).
+- **Build & Packaging**: Dockerfiles, image build scripts, packaging specs (`02-dockerfile.md`).
+- **Tests & Fixtures**: integration tests, test cases, YAML manifests (`03-e2e-tests.md`).
+- **Automation Runner Scripts**: writing automated scripts to deploy, poll, and verify cluster/lab state instead of Gru doing it manually (`04-lab-runner.md`).
 
 If work has dependencies, plan **waves**: wave 1 tasks → merge → wave 2 tasks (they start from the merged code).
 
@@ -112,7 +118,10 @@ A task with `status=fail` in `minion status` means the CLI itself errored (auth,
 ```bash
 minion merge <id> <id> ...   # or: minion merge --ok  (all tasks with status ok)
 ```
-Only merge tasks that PASSED review. After merging, run the project's full test suite on the main branch. If merge conflicts occur, resolve them yourself (you own integration), then `git commit`.
+Only merge tasks that PASSED review. After merging, run the project's verification command (e.g. `make test` or `go test`) on the main branch. If merge conflicts occur, resolve them yourself (you own integration), then `git commit`.
+
+**CRITICAL — DO NOT FIX POST-MERGE ISSUES BY HAND:**
+If post-merge tests fail, code generation is out of sync, or build issues appear: **DO NOT fix them yourself on the main branch!** Create a follow-up task (or next wave) for Minions to fix the failures in an isolated worktree. Gru's job is to orchestrate, not to write fixes.
 
 Next wave? Write new task files and go back to step 3.
 
@@ -126,6 +135,13 @@ Short summary:
 Then offer `minion clean` (archives tasks/outputs to `.minion/archive/`, removes worktrees and `minion/*` branches). Don't run it unasked if the user may want to inspect branches.
 
 ## Rules
+
+### Anti-Hoarding Rules (Strict Gru Boundaries)
+- **Zero Direct Coding:** Never edit code files, YAML manifests, test configs, or Dockerfiles by hand. Even for a 1-line timeout fix, create a task or send feedback to a Minion.
+- **Zero Manual Polling:** Never run Bash polling loops (`for`, `while`, `sleep`) to watch K8s pods, cloud deployments, or background jobs. Delegate writing an automated runner script to a Minion, then invoke it once.
+- **Delegate Build & Ops:** Container builds, code generation (`make generate`, `make verify`), and lab verification scripts belong to Minion tasks in their worktrees.
+
+### Safety & Permissions
 - Never put secrets or credentials into task files.
 - Never edit `~/.config/claude-minion/config` or worker account folders unless the user asks.
 - Don't push to remotes; the user decides that.
